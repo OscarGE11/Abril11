@@ -43,7 +43,7 @@ public class Stream {
         try {
             List<Empleado> listaEmpleados = aP1.obtenerTodos();
 
-            Set<String> listaCiudades= listaEmpleados.stream().map(Empleado::getCiudad).collect(Collectors.toSet());
+            List<String> listaCiudades= listaEmpleados.stream().map(Empleado::getCiudad).distinct()                 .collect(Collectors.toList());
 
             listaCiudades.forEach(System.out::println);
 

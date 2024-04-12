@@ -90,6 +90,10 @@ public class AccesoEmpleado extends Conexion {
             resultado = sentencia.executeUpdate();
 
             System.out.println("Correctamente añadido");
+            sentencia.close();
+
+            miConexion.close();
+
         } else {
             System.out.println("No se puede insertar porque ya existe");
 
