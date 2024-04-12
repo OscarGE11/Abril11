@@ -3,10 +3,9 @@ package com.softtek.persistencia;
 import com.softtek.modelo.Empleado;
 
 import javax.xml.transform.Result;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,24 +44,31 @@ public class AccesoEmpleado extends Conexion {
 
         String sql = "Select employee_id,first_name,last_name,reports_to,birth_date,city from employees;";
         List<Empleado> empleados = new ArrayList<>();
+
         abrirConexion();
         sentencia = miConexion.prepareStatement(sql);
         resultado = sentencia.executeQuery();
 
         while (resultado.next()) {
-            empleados.add(new Empleado(resultado.getInt("employee_id"),
-                    resultado.getString("first_name"),
-                    resultado.getString("last_name"),
-                    resultado.getInt("reports_to"),
-                            resultado.getDate("birth_date").toLocalDate(),
-                    resultado.getString("city"))
+            int employeeId = resultado.getInt("employee_id");
+            String firstName = resultado.getString("first_name");
+            String lastName = resultado.getString("last_name");
+            int reportsTo = resultado.getInt("reports_to");
 
+            Date birthDate = resultado.getDate("birth_date");
+            LocalDate birthLocalDate = null;
+            if (birthDate != null) {
+                birthLocalDate = birthDate.toLocalDate();
+            }
 
+            String city = resultado.getString("city");
 
-            );
+            empleados.add(new Empleado(employeeId, firstName, lastName, reportsTo, birthLocalDate, city));
         }
+
         return empleados;
     }
+
 
     public void insertarEmpleado(Empleado empleado) throws SQLException, ClassNotFoundException {
 
